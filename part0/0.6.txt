@@ -1,0 +1,16 @@
+note over browser:
+The browser creates a new note object, 
+and adds it to an array called notes.
+browser executes the event handler
+that re-renders notes to display
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note over browser:
+The browser sends the new note as JSON-data, 
+containing both the content of the note (content) 
+and the timestamp (date).
+end note
+
+server-->browser: 201 created
