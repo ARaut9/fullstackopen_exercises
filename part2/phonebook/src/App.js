@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Search from './components/Search';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
@@ -38,6 +37,8 @@ const App = () => {
             setTimeout(() => {
               setMessage(null)
             }, 5000)
+            setNewName('')
+            setNewNumber('')
           })
           .catch(() => {
             setMessage({ msg: `${newName} is already deleted from server`, code: 0 })
@@ -50,9 +51,18 @@ const App = () => {
       }
 
       personServices
-        .create(newContact).then(response => {
+        .create(newContact)
+        .then(response => {
           setPersons(persons.concat(response.data))
           setMessage({ msg: `${newName} Added`, code: 1 })
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => {
+          setMessage({ msg: error.response.data.error, code: 0 })
           setTimeout(() => {
             setMessage(null)
           }, 5000)
@@ -75,18 +85,18 @@ const App = () => {
     const deleteConfirmation = window.confirm(`Are you sure you want to delete ${personName.name}`)
 
     if (deleteConfirmation) {
-      const url = `http://localhost:3001/persons/${id}`
-      const changedPersons = persons.filter(per => per.id !== id)
-      axios
-        .delete(url)
+      personServices
+        .remove(id)
         .then(() => {
+          const changedPersons = persons.filter(per => per.id !== id)
           setPersons(changedPersons)
           setMessage({ msg: `Deleted ${personName.name}`, code: 1 })
           setTimeout(() => {
             setMessage(null)
           }, 5000)
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log(error)
           setMessage({ msg: `${personName.name} is already deleted from server`, code: 0 })
         })
     }
