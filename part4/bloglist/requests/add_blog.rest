@@ -1,0 +1,10 @@
+post http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOiI1ZDY0MjU3YmNmYzEyYzEzMmYxODdmZmQiLCJpYXQiOjE1NjY5MjYyNDB9.IOYHoyZO6f_15RpqR4x0sGb8avpvmuOUJHyXBkCu1g4
+
+{
+  "title": "random post",
+  "author": "random author",
+  "url": "https://someblog.com/random post",
+  "likes": 154
+}
