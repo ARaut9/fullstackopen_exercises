@@ -18,11 +18,6 @@ beforeEach(async () => {
     .map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
-
-  // for (let blog of helper.initialBlogs) {
-  //   let blogObject = new Blog(blog)
-  //   await blogObject.save()
-  // }
 })
 
 describe('when there is initially some blogs saved', () => {
@@ -346,6 +341,33 @@ describe('when there is initially one user in db', () => {
     expect(usersAtEnd.length).toBe(usersAtStart.length)
   })
 
+})
+
+describe('comments', () => {
+  test('adds a new comment to the specified blog post', async () => {
+
+    const blogsAtStart = await helper.blogsInDb()
+
+    const commentsBefore = blogsAtStart.map(blog => blog.comments)[0]
+
+    const blogToCommentOn = blogsAtStart[0]
+
+    const comment = {
+      comment: 'some comment',
+    }
+
+    await api
+      .post(`/api/blogs/${blogToCommentOn.id}/comments`)
+      .send(comment)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    const commentsAfter = blogsAtEnd.map(blog => blog.comments)[0]
+
+    expect(commentsAfter.length).not.toEqual(commentsBefore.length)
+  })
 })
 
 afterAll(() => {
